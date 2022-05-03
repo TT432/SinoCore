@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -23,16 +24,16 @@ import java.util.stream.Collectors;
  * @author skyinr
  */
 public class BlockLootTableBase extends BlockLoot {
-    private final String modID;
+    private final String modId;
     private final Set<Block> knownBlocks = new ObjectOpenHashSet<>();
     private final Set<Block> toSkip = new ObjectOpenHashSet<>();
 
     /**
-     * @param modID  mod id
+     * @param modid  mod id
      * @param blocks skip blocks
      */
-    public BlockLootTableBase(String modID, Block... blocks) {
-        this.modID = modID;
+    public BlockLootTableBase(String modid, Block... blocks) {
+        modId = modid;
         skip(blocks);
     }
 
@@ -87,7 +88,7 @@ public class BlockLootTableBase extends BlockLoot {
      *
      * @param blocks blocks to register
      */
-    protected void dropSelfWithContents(Set<Block> blocks) {
+    protected void dropSelfWithContents(Block... blocks) {
         for (Block block : blocks) {
             // skyinr: Skip blocks
             if (skipBlock(block)) {
@@ -111,8 +112,11 @@ public class BlockLootTableBase extends BlockLoot {
 
     @Override
     protected void addTables() {
-        dropSelfWithContents(Registry.BLOCK.stream()
-                .filter(b -> modID.equals(Registry.BLOCK.getKey(b).getNamespace()))// skyinr: Filter block in mod
-                .collect(Collectors.toSet()));
+        // qyl27: Registry should be used, use ForgeRegistries instead.
+        ForgeRegistries.BLOCKS.forEach(b -> {
+            if (b.getRegistryName().getNamespace().equals(modId)) {
+                dropSelfWithContents(b);
+            }
+        });
     }
 }

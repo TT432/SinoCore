@@ -15,18 +15,18 @@ import java.nio.file.Path;
  * @author qyl27
  */
 public abstract class ItemTagsProviderBase extends ItemTagsProvider {
-    protected String mainModId;
+    protected String childModId;
 
-    public ItemTagsProviderBase(DataGenerator pGenerator, BlockTagsProviderBase blockTags, String modId, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, blockTags, modId, existingFileHelper);
+    public ItemTagsProviderBase(DataGenerator pGenerator, BlockTagsProviderBase blockTags, String childModid, @Nullable ExistingFileHelper existingFileHelper) {
+        super(pGenerator, blockTags, blockTags.getModId(), existingFileHelper);
 
-        mainModId = blockTags.getMainModId();
+        childModId = childModid;
     }
 
     @Override
     protected Path getPath(ResourceLocation loc) {
         var key = this.registry.key();
-        return this.generator.getOutputFolder().resolve("data/" + mainModId + "/" + TagManager.getTagDir(key) + "/" + loc.getPath() + ".json");
+        return this.generator.getOutputFolder().resolve("data/" + modId + "/" + TagManager.getTagDir(key) + "/" + loc.getPath() + ".json");
     }
 
     @Override

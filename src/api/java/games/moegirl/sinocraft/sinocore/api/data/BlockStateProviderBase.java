@@ -2,6 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.data;
 
 import games.moegirl.sinocraft.sinocore.api.data.base.WarnBlockStateProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
@@ -24,8 +25,8 @@ public class BlockStateProviderBase extends WarnBlockStateProvider {
     private boolean adding = true;
     private final Set<Block> skipBlocks = new HashSet<>();
 
-    public BlockStateProviderBase(DataGenerator generator, String modId, ExistingFileHelper existingFileHelper, DeferredRegister<? extends Block> deferredRegister) {
-        super(generator, modId, existingFileHelper);
+    public BlockStateProviderBase(DataGenerator generator, String modId, String mainModId, ExistingFileHelper existingFileHelper, DeferredRegister<? extends Block> deferredRegister) {
+        super(generator, modId, mainModId, existingFileHelper);
         this.deferredRegister = deferredRegister;
     }
 

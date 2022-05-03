@@ -40,8 +40,8 @@ public class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use 
 
     private final DeferredRegister<? extends Item> deferredRegister;
 
-    public ItemModelProviderBase(DataGenerator generator, String modId, ExistingFileHelper exHelper, DeferredRegister<? extends Item> deferredRegister) {
-        super(generator, modId, exHelper);
+    public ItemModelProviderBase(DataGenerator generator, String modId, String childModId, ExistingFileHelper exHelper, DeferredRegister<? extends Item> deferredRegister) {
+        super(generator, modId, childModId, exHelper);
         this.deferredRegister = deferredRegister;
         // qyl: We need not an additional modId variable. MC already have.
     }

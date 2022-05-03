@@ -15,29 +15,30 @@ import java.nio.file.Path;
  * @author skyinr
  */
 public abstract class BlockTagsProviderBase extends ExtendedBlockTagsProvider {
-    protected String mainModId;
+    protected String childModId;
 
     public BlockTagsProviderBase(DataGenerator pGenerator, String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator, modId, existingFileHelper);
+        childModId = modId;
     }
 
-    public BlockTagsProviderBase(DataGenerator pGenerator, String modId, @Nullable ExistingFileHelper existingFileHelper, String mainModIdIn) {
+    public BlockTagsProviderBase(DataGenerator pGenerator, String modId, String childModIdIn, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator, modId, existingFileHelper);
-        mainModId = mainModIdIn;
+        childModId = childModIdIn;
     }
 
     @Override
     public String getName() {
-        return "Mod " + modId + " Block Tags";
+        return "Mod " + childModId + " Block Tags";
     }
 
     @Override
     protected Path getPath(ResourceLocation loc) {
         var key = this.registry.key();
-        return this.generator.getOutputFolder().resolve("data/" + getMainModId() + "/" + TagManager.getTagDir(key) + "/" + loc.getPath() + ".json");
+        return this.generator.getOutputFolder().resolve("data/" + modId + "/" + TagManager.getTagDir(key) + "/" + loc.getPath() + ".json");
     }
 
-    public String getMainModId() {
-        return mainModId != null ? mainModId : modId;
+    public String getModId() {
+        return modId;
     }
 }

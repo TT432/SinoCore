@@ -22,17 +22,19 @@ import java.util.function.Supplier;
  * @author skyinr
  */
 public abstract class LootTableProviderBase extends LootTableProvider {
-    protected final String modID;
+    protected final String modId;
+    protected final String childModId;
 
-    public LootTableProviderBase(DataGenerator pGenerator, String modID) {
+    public LootTableProviderBase(DataGenerator pGenerator, String modid, String childModid) {
         super(pGenerator);
-        this.modID = modID;
+        modId = modid;
+        childModId = childModid;
     }
 
     @Nonnull
     @Override
     public String getName() {
-        return super.getName() + ":" + modID;
+        return "LootTables: " + childModId;
     }
 
     /**

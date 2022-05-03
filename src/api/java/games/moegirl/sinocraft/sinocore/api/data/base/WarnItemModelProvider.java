@@ -19,13 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WarnItemModelProvider extends ItemModelProvider {
+    protected final String childModId;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final List<Pair<ResourceLocation, ResourceLocation>> notExistingModel = new ArrayList<>();
 
-    public WarnItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper helper) {
+    public WarnItemModelProvider(DataGenerator generator, String modid, String childModid, ExistingFileHelper helper) {
         super(generator, modid, helper);
+
+        childModId = childModid;
     }
 
     @Override
@@ -66,7 +69,12 @@ public abstract class WarnItemModelProvider extends ItemModelProvider {
 
     @Override
     public String getName() {
-        return "ItemModels: " + modid;
+        return "ItemModels: " + childModId;
+    }
+
+    @Override
+    public ResourceLocation modLoc(String name) {
+        return new ResourceLocation(childModId, name);
     }
 
     public void printAllExceptions() {

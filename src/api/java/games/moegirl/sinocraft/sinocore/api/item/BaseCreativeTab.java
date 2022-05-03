@@ -33,16 +33,6 @@ public abstract class BaseCreativeTab extends CreativeModeTab {
     @Override
     public ItemStack makeIcon() {
         // qyl27: Potato is a meme.
-
-        // Todo: remove it in ver 1.2.0.
-        if (getIcon() != null) {
-            return getIcon().asItem().getDefaultInstance();
-        }
-
         return Objects.requireNonNullElseGet(icon, () -> new ItemStack(Items.POTATO));
     }
-
-    @Deprecated(forRemoval = true, since = "1.1.2")
-    @Nullable
-    public abstract ItemLike getIcon();
 }
