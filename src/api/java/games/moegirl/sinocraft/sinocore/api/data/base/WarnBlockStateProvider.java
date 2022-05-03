@@ -13,39 +13,21 @@ import java.io.IOException;
 
 public abstract class WarnBlockStateProvider extends BlockStateProvider {
     protected final String modId;
-    protected final String mainModId;
+    protected final String childModId;
     private final WarnBlockModelProvider blockModels;
     private final WarnItemModelProvider itemModels;
 
-    @Deprecated(forRemoval = true, since = "1.1.2")
-    public WarnBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
+    public WarnBlockStateProvider(DataGenerator gen, String modid, String childModid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
         modId = modid;
-        mainModId = modid;
+        childModId = childModid;
 
         blockModels = new WarnBlockModelProvider(gen, modid, exFileHelper) {
             @Override
             protected void registerModels() {
             }
         };
-        itemModels = new WarnItemModelProvider(gen, modid, this.blockModels.existingFileHelper) {
-            @Override
-            protected void registerModels() {
-            }
-        };
-    }
-
-    public WarnBlockStateProvider(DataGenerator gen, String modid, String mainModid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
-        modId = modid;
-        mainModId = mainModid;
-
-        blockModels = new WarnBlockModelProvider(gen, modid, exFileHelper) {
-            @Override
-            protected void registerModels() {
-            }
-        };
-        itemModels = new WarnItemModelProvider(gen, modid, this.blockModels.existingFileHelper) {
+        itemModels = new WarnItemModelProvider(gen, modid, childModId, this.blockModels.existingFileHelper) {
             @Override
             protected void registerModels() {
             }
@@ -72,11 +54,11 @@ public abstract class WarnBlockStateProvider extends BlockStateProvider {
     @Nonnull
     @Override
     public String getName() {
-        return "BlockStates: " + modId;
+        return "BlockStates: " + childModId;
     }
 
     @Override
     public ResourceLocation modLoc(String name) {
-        return new ResourceLocation(mainModId, name);
+        return new ResourceLocation(childModId, name);
     }
 }
