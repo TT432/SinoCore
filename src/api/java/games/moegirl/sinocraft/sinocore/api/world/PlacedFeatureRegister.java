@@ -108,7 +108,7 @@ public class PlacedFeatureRegister {
 
         @Override
         public Holder<PlacedFeature> get() {
-            return getBuilder().build(name);
+            return getBuilder().register(name);
         }
 
         public GenerationStep.Decoration decoration() {

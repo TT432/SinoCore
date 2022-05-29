@@ -37,10 +37,6 @@ public class SimpleBlockLootTables extends BlockLoot {
         register.getEntries().stream().map(Supplier::get).forEach(this::addBlock);
     }
 
-    public void addBlocks(Collection<? extends Block> blocks) {
-        blocks.forEach(this::addBlock);
-    }
-
     public void remove(Block block) {
         blocks.remove(block);
     }

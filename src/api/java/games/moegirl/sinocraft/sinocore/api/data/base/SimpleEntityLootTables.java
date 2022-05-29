@@ -21,14 +21,6 @@ public class SimpleEntityLootTables extends EntityLoot {
         tables.forEach(this::addEntity);
     }
 
-    public void removeEntity(EntityType<?> entity) {
-        tables.remove(entity);
-    }
-
-    public void removeEntities(Iterable<EntityType<?>> entities) {
-        entities.forEach(tables::remove);
-    }
-
     @Override
     protected void addTables() {
         tables.forEach(this::add);
