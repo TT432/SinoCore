@@ -16,27 +16,27 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Base item model provider.
  *
  * @author skyinr
  */
-public class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use FooBase for our base data providers.
+public abstract class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use FooBase for our base data providers.
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
     protected Set<Item> skipItems = new HashSet<>();
+    protected Set<String> addedItems = new HashSet<>();
+    protected boolean adding;
 
     private final DeferredRegister<? extends Item> deferredRegister;
 
@@ -46,28 +46,34 @@ public class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use 
         // qyl: We need not an additional modId variable. MC already have.
     }
 
+    protected abstract void registerItemModels();
+
     /**
      * Register item model.
      */
     @Override
-    protected void registerModels() {
-        Set<Item> items = getItems();
-        items.removeAll(skipItems);
-
-        registerItemBlock(items.stream()
-                .filter(i -> i instanceof BlockItem)
-                .map(i -> (BlockItem) i)
-                .collect(Collectors.toSet()));
-        registerItem(items);
-    }
-
-    protected Set<Item> getItems() {
-        return deferredRegister.getEntries().stream().map(RegistryObject::get).collect(Collectors.toSet());
+    protected final void registerModels() {
+        adding = true;
+        registerItemModels();
+        adding = false;
+        deferredRegister.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(i -> !(i instanceof CrossbowItem))
+                .filter(i -> !skipItems.contains(i))
+                .filter(i -> !addedItems.contains(name(i)))
+                .forEach(item -> {
+                    if (item instanceof BlockItem i) {
+                        withExistingParent(name(i), modLoc("block/" + name(i)));
+                    } else if (item instanceof TieredItem) {
+                        handheldItem(item);
+                    } else {
+                        generatedItem(item);
+                    }
+                });
     }
 
     /**
      * @param items Set of items.
-     * @return
      */
     protected void skipItems(Item... items) {
         skipItems.addAll(Arrays.asList(items));
@@ -75,20 +81,9 @@ public class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use 
 
     /**
      * @param items Set of items.
-     * @return
      */
     protected void skipItems(RegistryObject<? extends Item>... items) {
         skipItems.addAll(Arrays.stream(items).map(RegistryObject::get).toList());
-    }
-
-    /**
-     * Register item block model.
-     *
-     * @param itemBlocks Set of item block.
-     */
-    protected void registerItemBlock(@NotNull Set<BlockItem> itemBlocks) {
-        itemBlocks.forEach(i -> withExistingParent(name(i),
-                modLoc("block/" + name(i))));   // qyl: Change prefix to mc builtin "modLoc".
     }
 
     /**
@@ -137,14 +132,12 @@ public class ItemModelProviderBase extends WarnItemModelProvider {  // qyl: Use 
         return ForgeRegistries.ITEMS.getKey(item).getPath();
     }
 
-    private void registerItem(Set<Item> items) {
-        items.removeAll(items.stream()
-                .filter(item -> item instanceof BlockItem || item instanceof CrossbowItem)
-                .collect(Collectors.toSet()));  // skyinr: Block and crossbow filter.
-        items.forEach(this::generatedItem);
-        items.stream()
-                .filter(item -> item instanceof TieredItem)
-                .forEach(this::handheldItem);  // skyinr: Tiered items filter.
+    @Override
+    public ItemModelBuilder getBuilder(String path) {
+        if (adding) {
+            addedItems.add(path);
+        }
+        return super.getBuilder(path);
     }
 
     /**
