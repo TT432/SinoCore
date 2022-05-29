@@ -19,9 +19,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Base item model provider.
@@ -56,34 +56,25 @@ public abstract class ItemModelProviderBase extends WarnItemModelProvider {  // 
         adding = true;
         registerItemModels();
         adding = false;
-        deferredRegister.getEntries().stream()
+        getItems().forEach(this::genItemModel);
+    }
+
+    protected Stream<? extends Item> getItems() {
+        return deferredRegister.getEntries().stream()
                 .map(RegistryObject::get)
                 .filter(i -> !(i instanceof CrossbowItem))
                 .filter(i -> !skipItems.contains(i))
-                .filter(i -> !addedItems.contains(name(i)))
-                .forEach(item -> {
-                    if (item instanceof BlockItem i) {
-                        withExistingParent(name(i), modLoc("block/" + name(i)));
-                    } else if (item instanceof TieredItem) {
-                        handheldItem(item);
-                    } else {
-                        generatedItem(item);
-                    }
-                });
+                .filter(i -> !addedItems.contains(name(i)));
     }
 
-    /**
-     * @param items Set of items.
-     */
-    protected void skipItems(Item... items) {
-        skipItems.addAll(Arrays.asList(items));
-    }
-
-    /**
-     * @param items Set of items.
-     */
-    protected void skipItems(RegistryObject<? extends Item>... items) {
-        skipItems.addAll(Arrays.stream(items).map(RegistryObject::get).toList());
+    protected void genItemModel(Item item) {
+        if (item instanceof BlockItem i) {
+            withExistingParent(name(i), modLoc("block/" + name(i)));
+        } else if (item instanceof TieredItem) {
+            handheldItem(item);
+        } else {
+            generatedItem(item);
+        }
     }
 
     /**
