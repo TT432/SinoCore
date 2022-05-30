@@ -1,8 +1,6 @@
-package games.moegirl.sinocraft.sinocore.crafting;
+package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
 import com.google.gson.JsonObject;
-import games.moegirl.sinocraft.sinocore.api.crafting.IFluidIngredient;
-import games.moegirl.sinocraft.sinocore.api.crafting.IFluidIngredientSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
@@ -17,11 +15,10 @@ import java.util.Optional;
 /**
  * Fluid ingredient serializer
  */
-public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
+public enum FluidIngredientSerializer {
     INSTANCE;
 
-    @Override
-    public IFluidIngredient fromNetwork(FriendlyByteBuf buffer) {
+    public FluidIngredient fromNetwork(FriendlyByteBuf buffer) {
         if (buffer.readBoolean()) {
             Fluid fluid = buffer.readRegistryId();
             int amount = buffer.readInt();
@@ -33,8 +30,7 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
         }
     }
 
-    @Override
-    public IFluidIngredient fromJson(JsonObject json) {
+    public FluidIngredient fromJson(JsonObject json) {
         int amount = GsonHelper.getAsInt(json, "amount", 1000);
         if (json.has("tag")) {
             ResourceLocation fluidName = new ResourceLocation(GsonHelper.getAsString(json, "tag"));
@@ -46,12 +42,11 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
             Objects.requireNonNull(fluid, "Unknown fluid " + fluidName);
             return new FluidIngredient(fluid, amount);
         } else {
-            return IFluidIngredient.EMPTY;
+            return FluidIngredient.EMPTY;
         }
     }
 
-    @Override
-    public void write(FriendlyByteBuf buffer, IFluidIngredient ingredient) {
+    public void write(FriendlyByteBuf buffer, FluidIngredient ingredient) {
         Optional<TagKey<Fluid>> tagOptional = ingredient.tag();
         buffer.writeBoolean(tagOptional.isEmpty());
         if (tagOptional.isEmpty()) {
@@ -62,8 +57,7 @@ public enum FluidIngredientSerializer implements IFluidIngredientSerializer {
         buffer.writeInt(ingredient.amount());
     }
 
-    @Override
-    public JsonObject write(JsonObject object, IFluidIngredient ingredient) {
+    public JsonObject write(JsonObject object, FluidIngredient ingredient) {
         if (ingredient.tag().isPresent()) {
             object.addProperty("tag", ingredient.tag().get().location().toString());
         } else {

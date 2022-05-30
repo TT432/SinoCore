@@ -1,4 +1,4 @@
-package games.moegirl.sinocraft.sinocore.crafting;
+package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

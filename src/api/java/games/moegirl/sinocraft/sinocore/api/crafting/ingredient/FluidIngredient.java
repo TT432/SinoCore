@@ -1,6 +1,5 @@
-package games.moegirl.sinocraft.sinocore.crafting;
+package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
-import games.moegirl.sinocraft.sinocore.api.crafting.IFluidIngredient;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
@@ -16,7 +15,9 @@ import java.util.stream.StreamSupport;
 /**
  * A fluid ingredient to check fluid or fluid tag and amount
  */
-public class FluidIngredient implements IFluidIngredient {
+public class FluidIngredient {
+
+    public static final FluidIngredient EMPTY = new FluidIngredient(Fluids.EMPTY, 0);
 
     private final Fluid fluid;
     @Nullable
@@ -36,28 +37,23 @@ public class FluidIngredient implements IFluidIngredient {
         this.amount = amount;
     }
 
-    @Override
     public Fluid fluid() {
         return fluid;
     }
 
-    @Override
     public Optional<TagKey<Fluid>> tag() {
         return Optional.ofNullable(tag);
     }
 
-    @Override
     public int amount() {
         return amount;
     }
 
-    @Override
     public boolean test(@Nullable FluidStack stack) {
         return stack != null && stack.getAmount() >= amount &&
                 (tag == null ? fluid == stack.getRawFluid() : stack.getRawFluid().defaultFluidState().is(tag));
     }
 
-    @Override
     public List<FluidStack> allStacks() {
         if (tag == null) {
             return List.of(new FluidStack(fluid, amount));

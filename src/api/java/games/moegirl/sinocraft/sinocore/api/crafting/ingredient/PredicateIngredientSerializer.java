@@ -1,9 +1,10 @@
-package games.moegirl.sinocraft.sinocore.crafting;
+package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer;
-import games.moegirl.sinocraft.sinocore.api.impl.Crafting;
+import games.moegirl.sinocraft.sinocore.api.crafting.ICrafting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -57,7 +58,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
         ICraftPredicateSerializer.Predicate<?>[] predicates = new ICraftPredicateSerializer.Predicate[buffer.readVarInt()];
         for (int i = 0; i < predicates.length; i++) {
             ResourceLocation id = buffer.readResourceLocation();
-            predicates[i] = Crafting.INSTANCE.getPredicateSerializer(id)
+            predicates[i] = SinoCoreAPI.getCrafting().getPredicateSerializer(id)
                     .orElseThrow(() -> new IllegalStateException("Unknown predicate " + id))
                     .fromNetwork(buffer);
         }
@@ -72,7 +73,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
             String s = keys.next();
             if (s.contains(":")) {
                 ResourceLocation id = new ResourceLocation(s);
-                Crafting.INSTANCE.getPredicateSerializer(id)
+                SinoCoreAPI.getCrafting().getPredicateSerializer(id)
                         .map(serializer -> serializer.fromJson(json.get(s)))
                         .ifPresent(p -> {
                             keys.remove();
@@ -111,7 +112,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
 
     public JsonObject write(PredicateIngredient ingredient) {
         JsonObject object = writeValue(ingredient.value);
-        object.addProperty("type", IngredientRegister.PREDICATE_INGREDIENT.toString());
+        object.addProperty("type", ICrafting.PREDICATE_INGREDIENT.toString());
         return object;
     }
 

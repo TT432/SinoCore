@@ -1,8 +1,8 @@
-package games.moegirl.sinocraft.sinocore.crafting;
+package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import games.moegirl.sinocraft.sinocore.SinoCore;
+import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ public enum CountPredicateSerializer implements ICraftPredicateSerializer<CountP
 
     INSTANCE;
 
-    private final ResourceLocation ID = new ResourceLocation(SinoCore.MODID, "count");
+    private final ResourceLocation ID = new ResourceLocation(SinoCoreAPI.getId(), "count");
 
     @Override
     public ResourceLocation id() {
