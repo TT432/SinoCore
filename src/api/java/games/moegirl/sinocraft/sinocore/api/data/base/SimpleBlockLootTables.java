@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

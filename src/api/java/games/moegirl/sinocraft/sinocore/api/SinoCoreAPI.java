@@ -14,12 +14,6 @@ import java.util.function.Consumer;
  */
 public class SinoCoreAPI {
 
-    /**
-     * @deprecated use {@link SharedConstants#IS_RUNNING_IN_IDE} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static final boolean DEBUG_MODE = SharedConstants.IS_RUNNING_IN_IDE;
-
     public static final Logger LOGGER = LogManager.getLogger();
     private static String scId;
     private static ICrafting crafting;
