@@ -1,11 +1,14 @@
-jdk:
-  - openjdk17
+before_install:
+  - sdk install java 17.0.2-open
+  - sdk use java 17.0.2-open
 install:
+  - "sdk current"
+  - "echo \n"
   - "ls $SDKMAN_DIR"
-  - "ls $SDKMAN_DIR/openjdk17"
-  - "ls $SDKMAN_DIR/java"
-  - "ls $SDKMAN_DIR/jdk"
-  - "ls $SDKMAN_DIR/jdk17"
+  - "echo \n"
+  - "ls $SDKMAN_DIR\candidates"
+  - "echo \n"
+  - "echo $JAVA_HOME"
 # before_install:
 #   - "chmod 777 gradlew"
 # install:
