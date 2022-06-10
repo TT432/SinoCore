@@ -3,12 +3,8 @@ before_install:
   - sdk use java 17.0.2-open
 install:
   - "sdk current"
-  - "echo \n"
   - "ls $SDKMAN_DIR"
-  - "echo \n"
   - "ls $SDKMAN_DIR\candidates"
-  - "echo \n"
-  - "echo $JAVA_HOME"
 # before_install:
 #   - "chmod 777 gradlew"
 # install:
