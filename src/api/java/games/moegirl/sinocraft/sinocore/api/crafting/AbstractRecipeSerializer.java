@@ -11,7 +11,7 @@ public abstract class AbstractRecipeSerializer<T extends Recipe<?>> extends Forg
     private final Class<T> type;
 
     public AbstractRecipeSerializer() {
-        type = (Class<T>) new TypeToken<T>() {}.getRawType();
+        type = (Class<T>) TypeToken.of(getClass()).getRawType();
     }
 
     public abstract void toJson(JsonObject pJson, T pRecipe);

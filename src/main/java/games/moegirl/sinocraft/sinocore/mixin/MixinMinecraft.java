@@ -1,6 +1,5 @@
 package games.moegirl.sinocraft.sinocore.mixin;
 
-import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
