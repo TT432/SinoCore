@@ -69,7 +69,12 @@ public abstract class ItemModelProviderBase extends WarnItemModelProvider {  // 
 
     protected void genItemModel(Item item) {
         if (item instanceof BlockItem i) {
-            withExistingParent(name(i), modLoc("block/" + name(i)));
+            ResourceLocation texture = modLoc("item/" + name(item));
+            if (existingFileHelper.exists(texture, TEXTURE)) {
+                generatedItem(item);
+            } else {
+                withExistingParent(name(i), modLoc("block/" + name(i)));
+            }
         } else if (item instanceof TieredItem) {
             handheldItem(item);
         } else {
