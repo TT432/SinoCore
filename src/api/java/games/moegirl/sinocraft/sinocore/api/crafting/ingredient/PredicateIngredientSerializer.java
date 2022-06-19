@@ -45,8 +45,11 @@ import java.util.*;
  *     // ...
  * }
  * }
+ *
+ * @deprecated remove because it is difficult to use to remove item from container after crafting
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
+@Deprecated(forRemoval = true)
 public enum PredicateIngredientSerializer implements IIngredientSerializer<PredicateIngredient> {
     INSTANCE;
 

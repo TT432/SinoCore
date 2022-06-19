@@ -16,7 +16,10 @@ import java.util.stream.Stream;
 /**
  * An ingredient use {@link CraftPredicateSerializer.Predicate}
  * to filter stacks
+ *
+ * @deprecated remove because it is difficult to use to remove item from container after crafting
  */
+@Deprecated(forRemoval = true)
 public class PredicateIngredient extends Ingredient {
 
     public static PredicateIngredient of(Ingredient ingredient,
