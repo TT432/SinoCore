@@ -1,8 +1,7 @@
 package games.moegirl.sinocraft.sinocore.api;
 
-import games.moegirl.sinocraft.sinocore.api.crafting.ICrafting;
-import games.moegirl.sinocraft.sinocore.api.network.INetwork;
-import net.minecraft.SharedConstants;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftingApi;
+import games.moegirl.sinocraft.sinocore.api.network.NetworkApi;
 import net.minecraftforge.fml.ModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,8 +15,8 @@ public class SinoCoreAPI {
 
     public static final Logger LOGGER = LogManager.getLogger();
     private static String scId;
-    private static ICrafting crafting;
-    private static INetwork network;
+    private static CraftingApi crafting;
+    private static NetworkApi network;
     private static boolean isInitialized = false;
 
     /**
@@ -33,7 +32,7 @@ public class SinoCoreAPI {
      *
      * @return Crafting API
      */
-    public static ICrafting getCrafting() {
+    public static CraftingApi getCrafting() {
         return crafting;
     }
 
@@ -42,7 +41,7 @@ public class SinoCoreAPI {
      *
      * @return Network API
      */
-    public static INetwork getNetwork() {
+    public static NetworkApi getNetwork() {
         return network;
     }
 
@@ -57,7 +56,7 @@ public class SinoCoreAPI {
 
     private static class ApiLoaderImpl implements ApiLoader {
         @Override
-        public void loadAll(String id, ICrafting craftingApi, INetwork networkApi) {
+        public void loadAll(String id, CraftingApi craftingApi, NetworkApi networkApi) {
             scId = id;
             crafting = craftingApi;
             network = networkApi;

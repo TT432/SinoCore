@@ -3,7 +3,7 @@ package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
-import games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftPredicateSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * A predicate serializer to check item count
  */
-public enum CountPredicateSerializer implements ICraftPredicateSerializer<CountPredicateSerializer.Predicate> {
+public enum CountPredicateSerializer implements CraftPredicateSerializer<CountPredicateSerializer.Predicate> {
 
     INSTANCE;
 
@@ -45,7 +45,7 @@ public enum CountPredicateSerializer implements ICraftPredicateSerializer<CountP
         buffer.writeVarInt(predicate.count);
     }
 
-    public record Predicate(int count) implements ICraftPredicateSerializer.Predicate<Predicate> {
+    public record Predicate(int count) implements CraftPredicateSerializer.Predicate<Predicate> {
 
         @Override
         public boolean test(@Nullable ItemStack stack) {
@@ -58,7 +58,7 @@ public enum CountPredicateSerializer implements ICraftPredicateSerializer<CountP
         }
 
         @Override
-        public ICraftPredicateSerializer<Predicate> serializer() {
+        public CraftPredicateSerializer<Predicate> serializer() {
             return INSTANCE;
         }
     }

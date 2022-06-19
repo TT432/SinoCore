@@ -2,7 +2,7 @@ package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftPredicateSerializer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * An ingredient use {@link games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer.Predicate}
+ * An ingredient use {@link CraftPredicateSerializer.Predicate}
  * to filter stacks
  */
 public class PredicateIngredient extends Ingredient {
 
     public static PredicateIngredient of(Ingredient ingredient,
-                                         Collection<? extends ICraftPredicateSerializer.Predicate<?>> predicates) {
+                                         Collection<? extends CraftPredicateSerializer.Predicate<?>> predicates) {
         return new PredicateIngredient(new Value(ingredient, predicates));
     }
 
@@ -47,7 +47,7 @@ public class PredicateIngredient extends Ingredient {
     }
 
     record Value(Ingredient ingredient,
-                 Collection<? extends ICraftPredicateSerializer.Predicate<?>> predicates) implements Ingredient.Value {
+                 Collection<? extends CraftPredicateSerializer.Predicate<?>> predicates) implements Ingredient.Value {
 
         @Override
         public Collection<ItemStack> getItems() {
@@ -55,7 +55,7 @@ public class PredicateIngredient extends Ingredient {
             if (input.isEmpty()) {
                 return Collections.emptyList();
             }
-            for (ICraftPredicateSerializer.Predicate<?> modifier : predicates) {
+            for (CraftPredicateSerializer.Predicate<?> modifier : predicates) {
                 input = modifier.getAllStack(input);
                 if (input.isEmpty()) {
                     return Collections.emptyList();

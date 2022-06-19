@@ -3,8 +3,8 @@ package games.moegirl.sinocraft.sinocore.api.crafting.ingredient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import games.moegirl.sinocraft.sinocore.api.SinoCoreAPI;
-import games.moegirl.sinocraft.sinocore.api.crafting.ICraftPredicateSerializer;
-import games.moegirl.sinocraft.sinocore.api.crafting.ICrafting;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftPredicateSerializer;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftingApi;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -55,7 +55,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
     @Override
     public PredicateIngredient parse(FriendlyByteBuf buffer) {
         Ingredient ingredient = Ingredient.fromNetwork(buffer);
-        ICraftPredicateSerializer.Predicate<?>[] predicates = new ICraftPredicateSerializer.Predicate[buffer.readVarInt()];
+        CraftPredicateSerializer.Predicate<?>[] predicates = new CraftPredicateSerializer.Predicate[buffer.readVarInt()];
         for (int i = 0; i < predicates.length; i++) {
             ResourceLocation id = buffer.readResourceLocation();
             predicates[i] = SinoCoreAPI.getCrafting().getPredicateSerializer(id)
@@ -67,7 +67,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
 
     @Override
     public PredicateIngredient parse(JsonObject json) {
-        List<ICraftPredicateSerializer.Predicate<?>> predicates = new ArrayList<>();
+        List<CraftPredicateSerializer.Predicate<?>> predicates = new ArrayList<>();
         Iterator<String> keys = json.keySet().iterator();
         while (keys.hasNext()) {
             String s = keys.next();
@@ -102,9 +102,9 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
     public void write(FriendlyByteBuf buffer, PredicateIngredient ingredient) {
         PredicateIngredient.Value value = ingredient.value;
         CraftingHelper.write(buffer, value.ingredient());
-        Collection<? extends ICraftPredicateSerializer.Predicate<?>> predicates = value.predicates();
+        Collection<? extends CraftPredicateSerializer.Predicate<?>> predicates = value.predicates();
         buffer.writeVarInt(predicates.size());
-        for (ICraftPredicateSerializer.Predicate predicate : predicates) {
+        for (CraftPredicateSerializer.Predicate predicate : predicates) {
             buffer.writeResourceLocation(predicate.serializer().id());
             predicate.serializer().toNetwork(buffer, predicate);
         }
@@ -112,7 +112,7 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
 
     public JsonObject write(PredicateIngredient ingredient) {
         JsonObject object = writeValue(ingredient.value);
-        object.addProperty("type", ICrafting.PREDICATE_INGREDIENT.toString());
+        object.addProperty("type", CraftingApi.PREDICATE_INGREDIENT.toString());
         return object;
     }
 
@@ -131,8 +131,8 @@ public enum PredicateIngredientSerializer implements IIngredientSerializer<Predi
             }
         }
 
-        for (ICraftPredicateSerializer.Predicate predicate : value.predicates()) {
-            ICraftPredicateSerializer serializer = predicate.serializer();
+        for (CraftPredicateSerializer.Predicate predicate : value.predicates()) {
+            CraftPredicateSerializer serializer = predicate.serializer();
             object.add(serializer.id().toString(), serializer.toJson(predicate));
         }
 

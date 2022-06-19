@@ -12,7 +12,7 @@ import java.util.List;
  * A serializer for {@link Predicate} to json/network.
  * @param <T> predicate type
  */
-public interface ICraftPredicateSerializer<T extends ICraftPredicateSerializer.Predicate<T>> {
+public interface CraftPredicateSerializer<T extends CraftPredicateSerializer.Predicate<T>> {
 
     /**
      * Get the predicate/serializer id
@@ -72,6 +72,6 @@ public interface ICraftPredicateSerializer<T extends ICraftPredicateSerializer.P
          * Get serializer
          * @return serializer
          */
-        ICraftPredicateSerializer<T> serializer();
+        CraftPredicateSerializer<T> serializer();
     }
 }

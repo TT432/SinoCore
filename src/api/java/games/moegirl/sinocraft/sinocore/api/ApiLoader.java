@@ -1,9 +1,9 @@
 package games.moegirl.sinocraft.sinocore.api;
 
-import games.moegirl.sinocraft.sinocore.api.crafting.ICrafting;
-import games.moegirl.sinocraft.sinocore.api.network.INetwork;
+import games.moegirl.sinocraft.sinocore.api.crafting.CraftingApi;
+import games.moegirl.sinocraft.sinocore.api.network.NetworkApi;
 
 public interface ApiLoader {
 
-    void loadAll(String id, ICrafting craftingApi, INetwork networkApi);
+    void loadAll(String id, CraftingApi craftingApi, NetworkApi networkApi);
 }
