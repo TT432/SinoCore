@@ -7,7 +7,7 @@ import games.moegirl.sinocraft.sinocore.api.impl.Network;
 import games.moegirl.sinocraft.sinocore.block.SCBlockItems;
 import games.moegirl.sinocraft.sinocore.block.SCBlocks;
 import games.moegirl.sinocraft.sinocore.block.blockentity.SCBlockEntities;
-import games.moegirl.sinocraft.sinocore.crafting.IngredientRegister;
+import games.moegirl.sinocraft.sinocore.command.SCCommands;
 import games.moegirl.sinocraft.sinocore.gui.SCMenus;
 import games.moegirl.sinocraft.sinocore.item.SCItems;
 import games.moegirl.sinocraft.sinocore.network.SCNetworks;
@@ -30,13 +30,13 @@ public class SinoCore {
         SCBlockEntities.register(bus);
 
         SCMenus.register(bus);
+        SCCommands.REGISTRY.register();
 
         bus.addListener(this::onSetup);
         SinoCoreAPI._loadCoreApi(this::registerApi);
     }
 
     private void onSetup(FMLCommonSetupEvent event) {
-        IngredientRegister.register();
     }
 
     private void registerApi(ApiLoader loader) {
