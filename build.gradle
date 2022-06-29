@@ -45,9 +45,9 @@ println('Java: ' + System.getProperty('java.version') +
         ' Arch: ' + System.getProperty('os.arch'))
 
 sourceSets {
-
     api {
-        compileClasspath = main.compileClasspath
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
     }
 
     main {
@@ -78,7 +78,6 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.18.2:2022.05.22@zip")
     }
-
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -97,6 +96,8 @@ jar {
     }
 
     from(sourceSets.api.output)
+
+    setClassifier('')
 }
 
 tasks.create('apiJar', Jar) {
@@ -105,7 +106,7 @@ tasks.create('apiJar', Jar) {
     from(sourceSets.api.output)
 }
 
-// run apiJar after build
+// run apiJar before build
 tasks.build.dependsOn(tasks.apiJar)
 
 // Example configuration to allow publishing using the maven-publish plugin
@@ -122,7 +123,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/../mavenLocal"
+            url "file://${project.projectDir}/mavenLocal"
         }
     }
 }
