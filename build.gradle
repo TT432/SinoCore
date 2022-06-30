@@ -95,15 +95,25 @@ jar {
         ])
     }
 
+    archiveClassifier.set('')
     from(sourceSets.api.output)
-
-    setClassifier('')
 }
 
 tasks.create('apiJar', Jar) {
     dependsOn(apiClasses)
     archiveClassifier.set('api')
     from(sourceSets.api.output)
+}
+
+tasks.create('sourcesJar', Jar) {
+    archiveClassifier.set('sources')
+    from(sourceSets.main.allJava)
+    from(sourceSets.api.allJava)
+}
+
+tasks.create('apiSourcesJar', Jar) {
+    archiveClassifier.set('api-sources')
+    from(sourceSets.api.allJava)
 }
 
 // run apiJar before build
@@ -119,6 +129,8 @@ publishing {
         mavenJava(MavenPublication) {
             artifact jar
             artifact apiJar
+            artifact sourcesJar
+            artifact apiSourcesJar
         }
     }
     repositories {
