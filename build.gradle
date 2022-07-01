@@ -103,6 +103,7 @@ tasks.create('apiJar', Jar) {
     dependsOn(apiClasses)
     archiveClassifier.set('api')
     from(sourceSets.api.output)
+    finalizedBy(remapJar)
 }
 
 tasks.create('sourcesJar', Jar) {
@@ -127,7 +128,7 @@ tasks.build.dependsOn(tasks.apiJar)
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
+            artifact remapJar
             artifact apiJar
             artifact sourcesJar
             artifact apiSourcesJar
