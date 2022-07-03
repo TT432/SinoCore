@@ -11,10 +11,10 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.FastColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.awt.*;
 import java.time.Duration;
 
 @OnlyIn(Dist.CLIENT)
@@ -23,7 +23,7 @@ public class AnimatedText extends AbstractWidget {
     private long beginTime;
     private double duration;
     private int repeat;
-    private Color color = Color.BLACK;
+    private int r, g, b;
 
     private Font font;
 
@@ -36,7 +36,7 @@ public class AnimatedText extends AbstractWidget {
         this(0, 0, pWidth, pHeight, Minecraft.getInstance().font);
     }
 
-    public void begin(Duration duration, int repeat, Color color, Component message) {
+    public void begin(Duration duration, int repeat, int r, int g, int b, Component message) {
         Verify.verify(duration.toNanos() > 0, "duration must not 0, your is " + duration);
         Verify.verify(message != TextComponent.EMPTY, "message must not empty");
 
@@ -44,15 +44,17 @@ public class AnimatedText extends AbstractWidget {
         this.beginTime = System.nanoTime();
         this.duration = duration.toNanos();
         this.repeat = repeat;
-        this.color = color;
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
-    public void begin(Duration duration, int repeat, Color color, String message) {
-        begin(duration, repeat, color, new TranslatableComponent(message));
+    public void begin(Duration duration, int repeat, int r, int g, int b, String message) {
+        begin(duration, repeat, r, g, b, new TranslatableComponent(message));
     }
 
-    public void begin(Duration duration, int repeat, Color color, String message, Object pArgs) {
-        begin(duration, repeat, color, new TranslatableComponent(message, pArgs));
+    public void begin(Duration duration, int repeat, int r, int g, int b, String message, Object pArgs) {
+        begin(duration, repeat, r, g, b, new TranslatableComponent(message, pArgs));
     }
 
     public void stop() {
@@ -102,9 +104,8 @@ public class AnimatedText extends AbstractWidget {
     }
 
     private void renderMessage(PoseStack poseStack, Component message, double alpha) {
-        Color c = new Color(color.getRed(), color.getGreen(), color.getGreen(), (int) (alpha * 255));
         int textWidth = font.width(message);
-        font.draw(poseStack, message, x - textWidth / 2f, y, c.getRGB());
+        font.draw(poseStack, message, x - textWidth / 2f, y, FastColor.ARGB32.color((int) (alpha * 255), r, g, b));
     }
 
     @Override
