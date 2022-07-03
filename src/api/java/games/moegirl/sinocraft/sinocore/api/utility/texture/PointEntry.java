@@ -1,7 +1,5 @@
 package games.moegirl.sinocraft.sinocore.api.utility.texture;
 
-import java.awt.*;
-
 public record PointEntry(String name, int x, int y) {
 
     public int u() {
@@ -18,9 +16,5 @@ public record PointEntry(String name, int x, int y) {
 
     public int h() {
         return y;
-    }
-
-    public Point toPoint() {
-        return new Point(x, y);
     }
 }

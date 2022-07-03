@@ -15,7 +15,6 @@ import java.util.Optional;
 @OnlyIn(Dist.CLIENT)
 public class ImageButton extends net.minecraft.client.gui.components.Button {
 
-    private final AbstractContainerScreen<?> parent;
     @Nullable
     private final OnPress onRightClick;
     private final TextureMap map;
@@ -31,7 +30,6 @@ public class ImageButton extends net.minecraft.client.gui.components.Button {
     public ImageButton(AbstractContainerScreen<?> parent, TextureMap texture, ButtonEntry entry, OnPress onPress, @Nullable OnPress onRightClick) {
         super(entry.x() + parent.getGuiLeft(), entry.y() + parent.getGuiTop(), entry.w(), entry.h(), entry.buildTooltip(), onPress,
                 entry.tooltip() == null ? NO_TOOLTIP : (__, arg2, i, j) -> parent.renderTooltip(arg2, entry.buildTooltip(), i, j));
-        this.parent = parent;
         this.onRightClick = onRightClick;
         this.map = texture;
         this.tex = entry.texture();
@@ -44,7 +42,7 @@ public class ImageButton extends net.minecraft.client.gui.components.Button {
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (this.active && this.visible) {
             if (!this.isValidClickButton(pButton)) {
-                if (onRightClick != null) {
+                if (onRightClick != null && isMouseOver(pMouseX, pMouseY)) {
                     onRightClick.onPress(this);
                     this.playDownSound(Minecraft.getInstance().getSoundManager());
                     return true;
