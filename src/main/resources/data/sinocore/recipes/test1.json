@@ -1,0 +1,11 @@
+{
+  "type": "sinocore:test",
+  "inputs": [
+    {
+      "item": "minecraft:potato"
+    }
+  ],
+  "result": {
+    "item": "iron_sword"
+  }
+}
