@@ -13,7 +13,10 @@ import net.minecraftforge.forgespi.language.ModFileScanData;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.objectweb.asm.Type;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author DustW
@@ -60,7 +63,5 @@ public class RecipeManager {
         return result;
     }
 
-    public static record RecipeData<C extends Container, R extends BaseRecipe<C>>(Class<R> aClass, String value) {
-
-    }
+    public static record RecipeData<C extends Container, R extends BaseRecipe<C>>(Class<R> aClass, String value) { }
 }

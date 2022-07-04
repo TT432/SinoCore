@@ -1,6 +1,7 @@
 package games.moegirl.sinocraft.sinocore.crafting.recipe.base;
 
 import com.google.gson.annotations.Expose;
+import games.moegirl.sinocraft.sinocore.crafting.recipe.impls.TemplateRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -14,14 +15,15 @@ import java.util.List;
 
 /**
  * @author DustW
+ * @see TemplateRecipe (使用范例)
  **/
 public abstract class BaseRecipe<C extends Container> implements Recipe<C> {
+
     protected ResourceLocation id;
     protected RecipeSerializer<?> serializer;
-    @Expose
-    public String type;
-    @Expose
-    public String group;
+
+    @Expose public String type;
+    @Expose public String group;
 
     public boolean matches(List<ItemStack> inputs) {
         return RecipeMatcher.findMatches(inputs, getIngredients()) != null;
